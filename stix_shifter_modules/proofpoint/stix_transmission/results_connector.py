@@ -12,8 +12,8 @@ class ResultsConnector(BaseResultsConnector):
 
     def create_results_connection(self, search_id, offset, length):
         try:
-            min_range = offset
-            max_range = offset + length
+            min_range = int(offset)
+            max_range = offset + int(length)
             # Grab the response, extract the response code, and convert it to readable json
             response = self.api_client.get_search_results(search_id)
             response_code = response.code
@@ -33,7 +33,7 @@ class ResultsConnector(BaseResultsConnector):
 
                     # slice of the data count according to offset values
                     if newdata and max_range > 0 and len(newdata) > max_range:
-                        newdata = newdata[:max_range]
+                        newdata = newdata[min_range:max_range]
 
                     for msg in newdata:
                         if "messageParts" in msg:
